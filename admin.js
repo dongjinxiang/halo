@@ -43,14 +43,51 @@
     }
     
     // 加载管理员数据
-    function loadAdminData() {
-        displayStatistics();
-        displayResultsTable();
+    async function loadAdminData() {
+        try {
+            const results = await API.getAllResults();
+            displayStatistics(results);
+            displayResultsTable(results);
+        } catch (error) {
+            console.error('加载数据失败:', error);
+            alert('加载数据失败，请稍后重试');
+        }
     }
     
     // 显示统计数据
-    function displayStatistics() {
-        const stats = DB.getStatistics();
+    function displayStatistics(results) {
+        // 计算统计数据
+        const stats = {
+            totalUsers: results.length,
+            genderDistribution: {
+                male: 0,
+                female: 0
+            },
+            preferenceStats: {}
+        };
+
+        // 统计性别分布和偏好
+        results.forEach(result => {
+            // 统计性别
+            if (result.userInfo.gender === 'male') {
+                stats.genderDistribution.male++;
+            } else {
+                stats.genderDistribution.female++;
+            }
+            
+            // 统计选项分布
+            if (result.answers) {
+                Object.keys(result.answers).forEach(questionId => {
+                    const optionId = result.answers[questionId];
+                    
+                    if (!stats.preferenceStats[optionId]) {
+                        stats.preferenceStats[optionId] = 0;
+                    }
+                    
+                    stats.preferenceStats[optionId]++;
+                });
+            }
+        });
         statsContainer.innerHTML = '';
         
         // 创建总用户数统计
@@ -115,8 +152,7 @@
     }
     
     // 显示结果表格
-    function displayResultsTable() {
-        const results = DB.getAllResults();
+    function displayResultsTable(results) {
         resultsTableBody.innerHTML = '';
         
         results.forEach(result => {
@@ -178,11 +214,16 @@
     }
     
     // 确认清除数据
-    function confirmClearData() {
+    async function confirmClearData() {
         if (confirm('确定要清除所有数据吗？此操作不可恢复！')) {
-            DB.clearAllData();
-            loadAdminData(); // 重新加载空数据
-            alert('所有数据已清除');
+            try {
+                await API.clearAllData();
+                await loadAdminData(); // 重新加载空数据
+                alert('所有数据已清除');
+            } catch (error) {
+                console.error('清除数据失败:', error);
+                alert('清除数据失败，请稍后重试');
+            }
         }
     }
     

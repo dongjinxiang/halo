@@ -170,7 +170,7 @@ function showResults() {
 }
 
 // 保存结果到数据库
-function saveResultToDatabase() {
+async function saveResultToDatabase() {
     const resultData = {
         userInfo: { ...userInfo },
         answers: { ...userAnswers },
@@ -181,9 +181,14 @@ function saveResultToDatabase() {
         }))
     };
     
-    // 使用数据库模块保存数据
-    currentResultId = DB.saveUserResult(resultData);
-    console.log('数据已保存，ID:', currentResultId);
+    // 使用API模块保存数据
+    try {
+        currentResultId = await API.saveUserResult(resultData);
+        console.log('数据已保存到服务器，ID:', currentResultId);
+    } catch (error) {
+        console.error('保存数据失败:', error);
+        alert('数据保存失败，请稍后重试');
+    }
 }
 
 // 计算推荐菜品
@@ -286,4 +291,4 @@ function restartQuiz() {
 }
 
 // 初始化应用
-document.addEventListener('DOMContentLoaded', initializeEventListeners); 
+document.addEventListener('DOMContentLoaded', initializeEventListeners);
