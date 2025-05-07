@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HALO西餐厅 - 美食推荐</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="welcome-screen" class="screen active">
+            <h1>HALO西餐厅</h1>
+            <p>欢迎您！请填写以下信息，帮助我们为您推荐合适的菜品</p>
+            
+            <div class="user-info">
+                <div class="input-group">
+                    <label for="nickname">您的昵称：</label>
+                    <input type="text" id="nickname" placeholder="请输入昵称" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>性别：</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="male" checked>
+                            <span>先生</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="gender" value="female">
+                            <span>女士</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="start-btn" class="btn">开始问卷</button>
+            <div class="admin-link">
+                <a href="#" id="admin-login">管理员入口</a>
+            </div>
+        </div>
+
+        <div id="question-screen" class="screen">
+            <div id="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <h2 id="question-title"></h2>
+            <div id="options-container"></div>
+            <div class="nav-buttons">
+                <button id="prev-btn" class="btn">上一题</button>
+                <button id="next-btn" class="btn">下一题</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <h2>您的美食推荐</h2>
+            <p id="result-greeting"></p>
+            <div id="recommendations"></div>
+            <p class="result-saved">您的偏好已记录，我们会持续优化菜品推荐</p>
+            <button id="restart-btn" class="btn">重新开始</button>
+        </div>
+        
+        <div id="admin-screen" class="screen">
+            <h2>管理员面板</h2>
+            <div class="admin-auth">
+                <input type="password" id="admin-password" placeholder="请输入管理员密码">
+                <button id="admin-auth-btn" class="btn">登录</button>
+                <button id="admin-back-btn" class="btn">返回</button>
+            </div>
+            
+            <div id="admin-content" style="display: none;">
+                <div class="statistics">
+                    <h3>问卷统计</h3>
+                    <div id="stats-container"></div>
+                </div>
+                
+                <div class="data-actions">
+                    <button id="export-data" class="btn small">导出数据</button>
+                    <button id="clear-data" class="btn small danger">清除所有数据</button>
+                </div>
+                
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户</th>
+                            <th>性别</th>
+                            <th>提交时间</th>
+                            <th>推荐菜品</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="menu.js"></script>
+    <script src="database.js"></script>
+    <script src="app.js"></script>
+    <script src="excel.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
